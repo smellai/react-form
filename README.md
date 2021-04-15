@@ -76,7 +76,7 @@ import { Input } from "./components/input";
 />
 ```
 
-To trigger validation on external conditions (e.g. on form submit), set propagatedTouch prop to `true` 
+To trigger validation on external conditions (e.g. on form submit), set **propagatedTouch** prop to `true` 
 
 ```Javascript
 import React, { useRef, useState } from 'react';
