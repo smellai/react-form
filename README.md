@@ -1,5 +1,7 @@
 # React Form Validation using [ValidityState object](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState)
 
+![Form Validation Demo](./screenshot.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -31,7 +33,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Usage
 
-Declare validation constraint using builtin [input tag](https://www.w3schools.com/tags/tag_input.asp) attributes like:
+Declare validation constraints using builtin [input tag](https://www.w3schools.com/tags/tag_input.asp) attributes like:
 
 - required
 - pattern
