@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# React Form Validation using [ValidityState object](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -29,42 +29,85 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+## Usage
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Declare validation constraint using builtin [input tag](https://www.w3schools.com/tags/tag_input.asp) attributes like:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- required
+- pattern
+- min
+- max
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Violations of the declared attributes will be reflected in the [ValidityState object](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```Javascript
+import { Input } from "./components/input";
 
-## Learn More
+<Input
+    id="name"
+    name="name"
+    inputLabel="Name*"
+    required
+    maxLength="45"
+    errorLabel="Name is required"
+/>
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For multiple error messages use **errorLabels** instead of single **errorLabel**. errorLabels keys must match the [ValidityState object](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState) ones.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```Javascript
+import { Input } from "./components/input";
 
-### Code Splitting
+<Input
+    type="number"
+    id="age"
+    name="age"
+    inputLabel="Age [18-100]*"
+    required
+    min="18"
+    max="100"
+    errorLabels={{
+        valueMissing: "Age is required",
+        rangeUnderflow: "Please enter a number > 18",
+        rangeOverflow: "Please enter a number < 100",
+    }}
+/>
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To trigger validation on external conditions (e.g. on form submit), set propagatedTouch prop to `true` 
 
-### Analyzing the Bundle Size
+```Javascript
+import React, { useRef, useState } from 'react';
+import { Input } from "./components/input";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export const FormComponent = () => {
+    const [formTouched, setFormTouched] = useState(false);
+    const formElement = useRef(null);
+    
+    const handleSubmit = (event) => {
+          setFormTouched(true);
+          event.preventDefault();
+          
+          if (formElement.current.reportValidity()) {
+            alert('all good!');
+          }
+      };
+    
+    <form onSubmit={handleSubmit}
+          ref={formElement}
+          noValidate={true}>
+        <Input
+            type="email"
+            id="email"
+            name="email"
+            inputLabel="Email*"
+            required
+            errorLabel="You must enter a valid email address"
+            propagatedTouch={formTouched}
+        />
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+}
+```

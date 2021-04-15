@@ -1,0 +1,32 @@
+.input-label,
+input {
+    display: block;
+}
+
+.demo-input {
+    padding: 1em 0;
+}
+
+input {
+    height: 30px;
+    width: 350px;
+}
+
+@media only screen and (max-width: 422px) {
+    input {
+        width: 100%;
+    }
+}
+
+.input-label {
+    margin-bottom: .5em;
+}
+
+.error-label {
+    color: red;
+    height: 18px;
+}
+
+.error input {
+    border: 1px solid red;
+}
